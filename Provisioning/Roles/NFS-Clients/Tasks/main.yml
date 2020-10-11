@@ -1,0 +1,35 @@
+- name: Install a list of packages
+  yum:
+    name:
+      - nfs-utils
+      - libreoffice-base
+      - libreoffice-impress
+      - libreoffice-core
+    state: latest
+
+- name: NFS
+  service: 
+    name: nfs-client.target
+    enabled: yes
+    
+- name: NFS
+  service: 
+    name: rpcbind
+    enabled: yes
+
+- name: Create the Directory
+  file:
+    path: /Client
+    state: directory 
+    mode: 0766
+    owner: vagrant 
+    group: vagrant
+
+- name: Set Mountpoints
+  mount: 
+    src: 192.168.33.50:/Server
+    path: /Client
+    fstype: nfs4
+    opts: defaults
+    state: mounted
+    

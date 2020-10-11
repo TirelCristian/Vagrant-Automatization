@@ -1,0 +1,58 @@
+- name: Create Mountable Directory
+  file: 
+    path: /Server
+    state: directory 
+    mode: 0766
+    owner: vagrant
+    group: vagrant
+
+- name: Install NFS
+  yum:
+    name:
+      - nfs-utils
+      - rpcbind
+    state: latest
+    
+#- name: Write into /etc/exports
+ # copy: 
+  #  src: /PublicKey/dvdrental.tar
+   # dest: /Server
+    
+- name: Write into /etc/exports
+  copy: 
+    content: /Server    192.168.33.201(rw,sync) 
+    dest: /etc/exports
+    
+- name: NFS
+  service: 
+    name: nfs-server
+    enabled: yes
+    
+- name: NFS
+  service: 
+    name: rpcbind
+    enabled: yes
+
+- name: Restart NFS-Server
+  service: 
+    name: nfs-server
+    state: restarted
+    
+- firewalld:
+    service: nfs
+    permanent: yes
+    immediate: yes
+    state: enabled
+    
+- firewalld:
+    service: mountd
+    permanent: yes
+    immediate: yes
+    state: enabled
+    
+- firewalld:
+    service: rpc-bind
+    permanent: yes
+    immediate: yes
+    state: enabled
+    

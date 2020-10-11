@@ -1,0 +1,12 @@
+---
+- hosts: NFS
+  roles:
+    - Common
+
+- hosts: NFS-Server
+  roles:
+    - NFS-Server
+    
+- hosts: NFS-Clients
+  roles:
+    - NFS-Clients

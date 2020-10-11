@@ -1,0 +1,6 @@
+- name: Install a list of packages
+  yum:
+    name:
+      - httpd
+      - python2
+    state: latest
